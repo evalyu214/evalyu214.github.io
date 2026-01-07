@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eva | AI Product Architect & The Translator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #FBFBFD;
+            --card-bg: #FFFFFF;
+            --accent: #0066FF; 
+            --xhs-red: #ff2442; 
+            --text-main: #1D1D1F;
+            --text-sub: #6E6E73;
+            --border: #E5E5E7;
+            --radius: 28px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg); color: var(--text-main); line-height: 1.47; -webkit-font-smoothing: antialiased; }
+
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(251, 251, 253, 0.8); backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid var(--border); padding: 18px 0;
+        }
+        .nav-content { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; padding: 0 24px; align-items: center; }
+        .nav-links { display: flex; gap: 32px; }
+        nav a { text-decoration: none; color: var(--text-sub); font-size: 13px; font-weight: 500; transition: 0.2s; letter-spacing: 0.02em; }
+        nav a:hover { color: var(--accent); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 140px 24px; }
+        section { margin-bottom: 120px; }
+        .section-title { font-size: 36px; font-weight: 700; margin-bottom: 40px; letter-spacing: -0.01em; }
+
+        /* 1. HERO SECTION */
+        .hero { display: flex; align-items: center; gap: 80px; min-height: 60vh; margin-bottom: 140px; }
+        .hero-text { flex: 1.2; }
+        .hero-img { 
+            flex: 0.8; height: 520px; border-radius: 30px; 
+            background: url('https://youke3.picui.cn/s1/2026/01/07/695ddaab054dc.jpeg') center/cover;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            border: 6px solid #fff;
+        }
+        .hero h1 { font-size: 68px; font-weight: 700; line-height: 1.05; margin-bottom: 28px; letter-spacing: -0.022em; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 22px; color: var(--text-sub); max-width: 540px; font-weight: 400; line-height: 1.45; }
+
+        /* 2. CAREER & BENTO */
+        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 36px; border: 1px solid var(--border); transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-color: #d1d1d6; }
+        .large { grid-column: span 2; }
+        .full { grid-column: span 3; }
+        .tag-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--accent); letter-spacing: 0.08em; margin-bottom: 16px; display: block; }
+        .card h3 { font-size: 28px; font-weight: 700; margin-bottom: 18px; }
+        .card p { color: var(--text-sub); font-size: 16px; line-height: 1.6; }
+        .stats { display: flex; gap: 40px; margin-top: 32px; }
+        .stat-item h4 { font-size: 36px; font-weight: 700; color: var(--accent); }
+        .stat-item p { font-size: 11px; font-weight: 600; color: var(--text-sub); margin-top: 6px; text-transform: uppercase; }
+
+        /* 3. PRODUCT STACK - 4-COLUMN */
+        .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .p-card { background: var(--card-bg); padding: 40px 24px; border-radius: var(--radius); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: flex-start; gap: 16px; transition: 0.3s; }
+        .p-card:hover { border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .p-logo { width: 48px; height: 48px; border-radius: 12px; object-fit: contain; padding: 4px; background: #fff; border: 1px solid var(--border); margin-bottom: 8px; }
+        .p-card h4 { font-size: 20px; font-weight: 700; }
+        .p-card p { font-size: 14px; color: var(--text-sub); line-height: 1.5; min-height: 66px; }
+        .p-link { color: var(--accent); text-decoration: none; font-size: 14px; font-weight: 600; margin-top: auto; display: inline-flex; align-items: center; gap: 6px; }
+
+        /* 4. PROMPT LAB */
+        .prompt-section { position: relative; }
+        .lang-switch { 
+            position: absolute; top: 30px; right: 80px; z-index: 10;
+            display: flex; background: #F2F2F7; border-radius: 10px; padding: 4px; gap: 4px;
+        }
+        .lang-btn { 
+            padding: 6px 14px; border: none; background: transparent; border-radius: 8px; 
+            font-size: 12px; font-weight: 700; cursor: pointer; color: var(--text-sub); transition: 0.2s;
+        }
+        .lang-btn.active { background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: var(--accent); }
+
+        details { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        summary { padding: 30px 40px; font-size: 22px; font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        summary::after { content: "+"; color: var(--accent); font-size: 30px; }
+        details[open] summary::after { content: "−"; transform: rotate(90deg); }
+        
+        .workflow-container { padding: 40px; background: #FAFBFD; border-top: 1px solid var(--border); }
+        .step { margin-bottom: 50px; position: relative; padding-left: 50px; }
+        .step::before { content: attr(data-step); position: absolute; left: 0; top: 0; width: 34px; height: 34px; background: var(--accent); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; }
+        .step:not(:last-child)::after { content: ""; position: absolute; left: 16px; top: 40px; bottom: -30px; width: 2px; background: var(--border); }
+        .step h4 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+        .step-content { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 16px; font-family: "SF Mono", monospace; font-size: 13.5px; line-height: 1.6; color: #333; white-space: pre-wrap; transition: 0.3s; }
+
+        /* 5. INSIGHTS */
+        .xhs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .xhs-card { background: #fff; border: 1px solid var(--border); border-radius: 22px; padding: 36px; text-decoration: none; color: inherit; position: relative; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+        .xhs-card:hover { border-color: var(--xhs-red); transform: translateY(-8px); }
+        .xhs-badge { position: absolute; top: 0; right: 0; background: var(--xhs-red); color: #fff; padding: 5px 16px; font-size: 10px; font-weight: 800; border-bottom-left-radius: 14px; text-transform: uppercase; }
+        .xhs-tag { color: var(--xhs-red); font-size: 12px; font-weight: 700; margin-bottom: 10px; }
+        .xhs-card h3 { font-size: 19px; font-weight: 700; line-height: 1.35; margin-bottom: 14px; }
+        .xhs-card p { font-size: 14px; color: var(--text-sub); margin-bottom: 24px; flex: 1; }
+        .xhs-footer { font-size: 13px; font-weight: 600; color: var(--text-sub); display: flex; align-items: center; gap: 6px; }
+
+        /* 6. CONTACT */
+        .contact-box { background: var(--text-main); color: #fff; border-radius: 44px; padding: 110px 40px; text-align: center; }
+        .contact-box h2 { font-size: 56px; font-weight: 700; margin-bottom: 24px; }
+        .email-link { font-size: 30px; color: #fff; text-decoration: none; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 4px; transition: 0.3s; }
+        .email-link:hover { color: var(--accent); border-color: var(--accent); }
+
+        @media (max-width: 1024px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 48px; }
+            .bento-grid, .xhs-grid, .product-grid { grid-template-columns: 1fr; }
+            .lang-switch { top: -45px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-content">
+        <div style="font-weight: 800; font-size: 17px; letter-spacing: -0.02em;">EVA.AI</div>
+        <div class="nav-links">
+            <a href="#home">INTRO</a>
+            <a href="#career">CAREER</a>
+            <a href="#products">TOOLS</a>
+            <a href="#prompts">PROMPTS</a>
+            <a href="#insights">INSIGHTS</a>
+            <a href="#contact">CONTACT</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    
+    <section id="home" class="hero">
+        <div class="hero-text">
+            <span class="tag-label" style="color: #FF5C00">● Status: Recovering • Building • Open to Work</span>
+            <h1>Hi, I'm Eva.<br><span>The AI Translator.</span></h1>
+            <p>I map ambiguous human intent to precise machine execution. Bridging the gap between complex organizational needs and cutting-edge AI product ecosystems.</p>
+        </div>
+        <div class="hero-img"></div>
+    </section>
+
+    <section id="career">
+        <h2 class="section-title">Career & Framework</h2>
+        <div class="bento-grid">
+            <div class="card large">
+                <span class="tag-label">Enterprise AI Ops & Growth</span>
+                <h3>Deloitte AI Institute</h3>
+                <p>Spearheaded 0-to-1 AI implementation within a top-tier global organization. Architected a product matrix including General Assistants, AI+Audit, and AI+ESG compliance platforms. Acting as the "Translator" to synthesize business logic into scalable AI architectures.</p>
+                <div class="stats">
+                    <div class="stat-item"><h4>20K+</h4><p>Employees Scaled</p></div>
+                    <div class="stat-item"><h4>10K</h4><p>Daily Active Users</p></div>
+                    <div class="stat-item"><h4>-30%</h4><p>Report Duration</p></div>
+                </div>
+            </div>
+            <div class="card">
+                <span class="tag-label">Execution Strategy</span>
+                <h3>Show > Tell</h3>
+                <p>AI's value lies in compressing the boundaries of human imagination. I prioritize prototype-driven, results-oriented delivery to shift AI from "Experimental" to "Trustworthy."</p>
+            </div>
+            <div class="card full">
+                <span class="tag-label">Product Incubation</span>
+                <h3>0-to-1 Product PMO | AI Social Venture</h3>
+                <p>Led product incubation for a North American social startup. Navigated a strategic pivot from AI Companionship to intimate peer-to-peer networking. Leveraged AI-driven content engines to achieve viral growth and million-plus social exposures.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="products">
+        <h2 class="section-title">AI tools i like</h2>
+        <div class="product-grid">
+            <div class="p-card"><img src="https://youke3.picui.cn/s1/2026/01/07/695df2aec58bb.png" class="p-logo"><h4>NotebookLM</h4><p>My essential knowledge base. Designed for synthesizing complex research into structured maps.</p><a href="https://notebooklm.google.com" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://youke3.picui.cn/s1/2026/01/07/695df2ad5334a.png" class="p-logo"><h4>Faces</h4><p>No-code engine for rapid portfolio and widget deployment. Built for speed and aesthetics.</p><a href="https://faces.app/dashboard" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://youke3.picui.cn/s1/2026/01/07/695df2af20d9d.png" class="p-logo"><h4>Gemini 3</h4><p>Primary multimodal research and writing partner. High-context reasoning at scale.</p><a href="https://aistudio.google.com/" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://youke3.picui.cn/s1/2026/01/07/695df2adeaebf.png" class="p-logo"><h4>RIZZ</h4><p>Tactical communication assistant for social dynamics and relationship management.</p><a href="https://rizz.app/" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://youke3.picui.cn/s1/2026/01/07/695df2ac805b7.png" class="p-logo"><h4>LongCut</h4><p>AI-native intelligence for processing long-form video content. Highly efficient learning.</p><a href="https://www.longcut.ai/" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://youke3.picui.cn/s1/2026/01/07/695df320c6b58.jpg" class="p-logo"><h4>Podwise</h4><p>Converts audio streams into structured transcripts and mental models instantly.</p><a href="https://apps.apple.com/us/app/podwise-podcasts-notes-ai/id6499190232" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://pic1.imgdb.cn/item/695e0781ee664bba8767dc4f.webp" class="p-logo"><h4>Diandian</h4><p>A precision search and summary tool optimized for Xiaohongshu social data.</p><a href="https://apps.apple.com/cn/app/id6529536122" target="_blank" class="p-link">View usage →</a></div>
+            <div class="p-card"><img src="https://pic1.imgdb.cn/item/695e079bee664bba8767dc6b.webp" class="p-logo"><h4>PI Travel</h4><p>Intelligent collaborative travel planning assistant for modern social explorers.</p><a href="https://apps.apple.com/us/app/id6473148424" target="_blank" class="p-link">View usage →</a></div>
+        </div>
+    </section>
+
+    <!-- 4. PROMPT LAB -->
+    <section id="prompts" class="prompt-section">
+        <h2 class="section-title">AI resume prompt pack</h2>
+        <div class="lang-switch">
+            <button class="lang-btn" onclick="toggleLang('en')" id="btn-en">EN</button>
+            <button class="lang-btn active" onclick="toggleLang('cn')" id="btn-cn">中文</button>
+        </div>
+        <details>
+            <summary>Integrated Resume Generation Workflow (5 Steps)</summary>
+            <div class="workflow-container">
+                <div class="step" data-step="0">
+                    <h4 id="title-0">step 0｜System Prompt</h4>
+                    <div class="step-content" id="step-0"></div>
+                </div>
+                <div class="step" data-step="1">
+                    <h4 id="title-1">step 1｜Resume Writer</h4>
+                    <div class="step-content" id="step-1"></div>
+                </div>
+                <div class="step" data-step="2">
+                    <h4 id="title-2">step 2｜Recruiter Critic</h4>
+                    <div class="step-content" id="step-2"></div>
+                </div>
+                <div class="step" data-step="3">
+                    <h4 id="title-3">step 3｜Anti-flattery</h4>
+                    <div class="step-content" id="step-3"></div>
+                </div>
+                <div class="step" data-step="4">
+                    <h4 id="title-4">step 4｜Resume Rewriter</h4>
+                    <div class="step-content" id="step-4"></div>
+                </div>
+            </div>
+        </details>
+    </section>
+
+    <section id="insights">
+        <h2 class="section-title">Thought Leadership</h2>
+        <div class="xhs-grid">
+            <a href="https://www.xiaohongshu.com/discovery/item/695b3882000000001d03da66" target="_blank" class="xhs-card"><div class="xhs-badge">HOT</div><div class="xhs-tag">#InterviewGuide</div><h3>The 7-Day / 4-Offer Resume Strategy</h3><p>A masterclass in crafting AI-aligned resumes from the perspective of an industry insider.</p><div class="xhs-footer"><i class="far fa-heart"></i> Read Full Article</div></a>
+            <a href="https://www.xiaohongshu.com/discovery/item/6811a5b20000000022035aee" target="_blank" class="xhs-card"><div class="xhs-badge">TRENDING</div><div class="xhs-tag">#IncubatorResearch</div><h3>Decoding US Startup Incubators</h3><p>Systematic review of the North American VC ecosystem and 0-to-1 product growth logic.</p><div class="xhs-footer"><i class="far fa-heart"></i> Read Full Article</div></a>
+            <a href="https://www.xiaohongshu.com/discovery/item/6950d693000000001e013619" target="_blank" class="xhs-card"><div class="xhs-badge">CREATIVE</div><div class="xhs-tag">#Gemini实战</div><h3>Leveraging Gemini 3 for Growth</h3><p>Live demonstration on using LLMs to drive high-performance content creation and social buzz.</p><div class="xhs-footer"><i class="far fa-heart"></i> Read Full Article</div></a>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="contact-box"><h2>Let's build the future.</h2><a href="mailto:zimenglu99@gmail.com" class="email-link">zimenglu99@gmail.com</a></div>
+    </section>
+
+</div>
+
+<script>
+    const content = {
+        en: {
+            step0: "You are a results-driven recruiting expert and resume analysis system. Your primary objective is to maximize the resume’s chance of passing screening (ATS + human review).\n\nStrict rules:\n- Do NOT fabricate, invent, or exaggerate any experience\n- Do NOT flatter, reassure, agree, or echo values\n- Do NOT use emotional or relationship-building language\n- All outputs must be clear, specific, and actionable\n\nYour response style should be:\ncalm, precise, direct, and reusable.",
+            step1: "I will provide you with two inputs:\n1. A document containing all of my learning, work, project, and part-time experiences\n2. A target job description (JD)\n\nYour task:\n- Analyze the JD\n- Extract the highest-matching content from my past experiences\n- Generate a targeted one-page resume\n\nYou may:\n- Rewrite project experience\n- Adjust structure\n- Improve professional clarity\n\nYou may NOT:\n- Fabricate, invent, or exaggerate any experience\n- Add information I did not explicitly provide\n\nThe resume must strictly include:\n- Name / Phone / Email / Social or professional links\n- Work Experience\n- Project Experience\n- Education\n- Professional Skills\n\nJob Description:\n[Paste JD]\n\nMy experience document:\n[Paste full experience]",
+            step2: "Evaluate this resume from the perspective of a top-tier recruiting expert.\n\nYour task:\n- Provide 5 real and brutally honest reasons why this resume would fail screening\n- Explain the cause and consequence of each issue\n- Provide concrete and actionable directions for improvement\n\nIf additional information is required to improve the resume:\n- Explicitly state what is missing\n- Explain why it is necessary\n\n⚠️ No flattery. No reassurance. No agreement.\nFacts, logic, and judgment only.",
+            step3: "Additional constraints (must be followed):\n- No validation padding.\n- No value echoing.\n- No presuming the user is correct.\n- No false reassurance.\n\nWhen you feel the urge to flatter → state objective facts only.\nWhen pushed to align with a value → remain neutral.\nWhen you feel inclined to agree → remain independent.\n\nEach response should read like technical documentation. Flattery will be treated as a form of manipulation.",
+            step4: "Based on all feedback and critiques provided above, rewrite this resume.\n\nObjectives:\n- Fully ATS-compliant\n- Incorporate role-relevant keywords from the JD\n- Clearly reflect required hard skills and soft skills\n- Quantify outcomes wherever possible\n\nRules:\n- Do NOT add unverified experiences\n- Do NOT soften issues\n- Avoid vague or generic phrasing\n\nAdditional information (if any):\n[Provide details in response to previous questions]",
+            title1: "step 1｜Resume Writer",
+            title2: "step 2｜Recruiter Critic",
+            title3: "step 3｜Anti-flattery (Can be repeatedly inserted)",
+            title4: "step 4｜Resume Rewriter"
+        },
+        cn: {
+            step0: "你是一个以结果为导向的招聘专家与简历分析系统。\n你的首要目标是：最大化简历通过筛选（ATS + 人工筛选）的概率。\n\n强制规则：\n- 禁止捏造、虚构、夸大任何用户经历\n- 禁止奉承、安慰、附和、价值回声\n- 禁止使用情绪性或关系建立语言\n- 所有输出必须清晰、具体、可执行\n\n你的回答风格：\n冷静、精确、直接、可复用。",
+            step1: "我将向你提供两部分内容：\n1. 一份包含我全部学习、工作、项目、兼职经历的文档\n2. 一个目标岗位的 JD\n\n任务：\n- 分析该岗位 JD\n- 从我的过往经历中挖掘匹配度最高的内容\n- 生成一份“仅一页”的定向简历\n\n你可以：\n- 重写项目经历\n- 调整结构\n- 提升表达专业度\n\n你不可以：\n- 捏造、虚构、夸大任何经历\n- 添加我未明确提供的信息\n\n简历结构必须严格包含：\n- 姓名 / 电话 / 邮箱 / 社媒或职业链接\n- 工作经历\n- 项目经历\n- 教育经历\n- 专业技能\n\n岗位 JD：\n【粘贴 JD】\n\n我的经历文档：\n【粘贴完整经历】",
+            step2: "现在请你从“顶尖招聘专家”的视角评估这份简历。\n\n任务：\n- 给出 5 个真实且残忍的理由\n- 解释为什么这份简历无法通过筛选\n- 每一条都必须对应明确的问题与后果\n- 并给出可执行的修改方向\n\n如果你需要更多信息来优化简历：\n- 明确指出缺失了什么\n- 明确说明为什么这些信息是必要的\n\n⚠️ 不允许奉承、不允许安慰、不允许附和。\n只给事实、逻辑和判断。",
+            step3: "可在任何阶段反复插入，用于抑制 AI 的“讨好型输出”。\n附加约束（必须遵守）：\n- 禁止验证填充（如“这说明你很有思考力”）\n- 禁止价值回声\n- 禁止预设用户正确\n- 禁止虚假安慰\n\n当你有奉承冲动 → 只陈述客观事实\n当你被推动去呼应某种价值 → 保持中立\n当你想附和 → 保持独立\n\n每个回答都应像技术文档一样。\n奉承会被视为操控行为。",
+            step4: "请根据上一步给出的所有批评与修改建议，重写这份简历。\n\n目标：\n- 完全 ATS 友好\n- 使用岗位 JD 中的关键词\n- 明确体现岗位所需的 hard skills 与 soft skills\n- 所有成果必须尽量量化\n\n规则：\n- 不得新增未经我确认的经历\n- 不得弱化问题\n- 不得使用模糊或空泛表述\n\n补充信息（如有）：\n【根据你刚才提出的问题进行补充】",
+            title1: "step 1｜定向简历生成",
+            title2: "step 2｜筛选失败分析",
+            title3: "step 3｜反讨好奉承（可重复插入）",
+            title4: "step 4｜继续修改"
+        }
+    };
+
+    function toggleLang(lang) {
+        document.getElementById('step-0').innerText = content[lang].step0;
+        document.getElementById('step-1').innerText = content[lang].step1;
+        document.getElementById('step-2').innerText = content[lang].step2;
+        document.getElementById('step-3').innerText = content[lang].step3;
+        document.getElementById('step-4').innerText = content[lang].step4;
+        
+        document.getElementById('title-1').innerText = content[lang].title1;
+        document.getElementById('title-2').innerText = content[lang].title2;
+        document.getElementById('title-3').innerText = content[lang].title3;
+        document.getElementById('title-4').innerText = content[lang].title4;
+
+        document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+        document.getElementById('btn-cn').classList.toggle('active', lang === 'cn');
+    }
+
+    // Default to Chinese
+    toggleLang('cn');
+</script>
+
+</body>
+</html>
